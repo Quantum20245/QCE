@@ -138,14 +138,14 @@
     <div class="md:w-1/2 mb-10 md:mb-0">
         <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Quantum Care Essentials</h1>
       <h3 class="text-3xl md:text-3xl font-bold text-gray-900 mb-4">
-        Premium Medical Equipment for Your Health Needs
+        Medicare — Covered Medical Equipment Delivered to You
       </h3>
       <p class="text-lg text-gray-600 mb-8">
-        High-quality durable medical equipment with exceptional service and competitive pricing.
+        Hippa Compliant | Medicare-certified Supplier | Fast, Friendly Support
       </p>
       <div class="flex space-x-4">
         <a href="products.html" class="bg-blue-800 hover:[background-color:#3c9cd3] text-white px-6 py-3 rounded-lg font-medium transition-smooth">
-          Shop Products
+          Equipment We Offer
         </a>
         <a href="tel:7328531940" class="border border-blue-800 text-blue-800 hover:bg-blue-200 px-6 py-3 rounded-lg font-medium transition-smooth">
           Call Us
@@ -176,7 +176,10 @@
                 <div class="w-20 h-1 bg-blue-800 mx-auto"></div>
             </div>
             <div class="max-w-4xl mx-auto text-center mb-16">
-                <p class="text-lg text-gray-600">Quantum Care Essentials stands as your premier destination for high-caliber durable medical equipment (DME) and unparalleled service within the healthcare sector. With a steadfast commitment to customer satisfaction, we strive to deliver innovative and pragmatic solutions tailored to your needs.</p>
+                <p class="text-lg text-gray-600">Quantum Care Essentials is a Medicare-approved supplier of durable medical equpment (DME), dedicated to helping patients access the devices they need — with no out-of-pocketcost for those who qualify.
+                    We work directly with patients, providers, and caregivers to supply essential medical equipment such as continuous  glucose monitors (CGMs), back braces, and TENS units. Our team helps coordinate prescriptions, verify coverage, and ensure a smooth process from start to finish.
+                    Whether you're a patient or a provider, we're here to make getting equipment easy, compliant, and stress-free.
+                </p>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-8 mb-16">
                 <div class="bg-white p-8 rounded-xl shadow-md text-center transition-smooth hover:shadow-lg">
@@ -474,17 +477,30 @@
 
     <!-- Centered Text and Form -->
     <div class="flex flex-col items-center justify-center text-center">
-      <h2 class="text-3xl font-bold text-blue-800 mb-2">Join Our List</h2>
-      <p class="text-gray-700 mb-6">Get news and alerts by email or phone!</p>
+      <h2 class="text-3xl font-bold text-blue-800 mb-2">Subscribe for Assistance</h2>
+      <p class="text-gray-700 mb-6">Leave your contact — We'll handle the rest!</p>
 
-      <form onsubmit="submitNewsletter(event)" class="w-full flex flex-col gap-4">
-        <input type="email" id="newsletterEmail" placeholder="Your email address"
-          class="w-full border border-gray-300 px-4 py-2 rounded">
-        <input type="tel" id="newsletterPhone" placeholder="Your phone number"
-          class="w-full border border-gray-300 px-4 py-2 rounded">
+        <form name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field"
+            id="newsletterForm" class="w-full flex flex-col gap-4">
+        <!-- Required hidden field so Netlify knows this form's name -->
+        <input type="hidden" name="form-name" value="newsletter" />
+        <!-- (Optional) capture source page -->
+        <input type="hidden" name="source" value="home-index" />
+        <!-- Honeypot (spam protection) -->
+        <p class="hidden"><label>Don’t fill this out: <input name="bot-field" /></label></p>
+
+        <input type="email" id="newsletterEmail" name="email" placeholder="Your email address"
+            class="w-full border border-gray-300 px-4 py-2 rounded" />
+        <input type="tel" id="newsletterPhone" name="phone" placeholder="Your phone number"
+            class="w-full border border-gray-300 px-4 py-2 rounded" />
+
         <button type="submit"
-          class="bg-blue-800 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition font-semibold w-full">Join Now</button>
-      </form>
+            class="bg-blue-800 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition font-semibold w-full">Join Now</button>
+
+        <!-- Inline success/error messages (optional) -->
+        <p id="nlSuccess" class="hidden text-green-700 mt-3">Thanks! You’re on the list.</p>
+        <p id="nlError"   class="hidden text-red-700 mt-3">Oops—please try again.</p>
+        </form>
 
       <label class="inline-flex items-center mt-4">
         <input type="checkbox" id="dontShowAgain" class="mr-2">
@@ -510,21 +526,53 @@
     }
     document.getElementById("newsletterModal").classList.add("hidden");
   }
-
-  function submitNewsletter(event) {
-    event.preventDefault();
-    const email = document.getElementById("newsletterEmail").value.trim();
-    const phone = document.getElementById("newsletterPhone").value.trim();
-
-    if (!email && !phone) {
-      alert("Please enter either your email or phone number to subscribe.");
-      return;
-    }
-
-    alert("Thank you for subscribing!");
-    closeModal();
-  }
 </script>
+
+    <script>
+    (function () {
+        const form = document.getElementById('newsletterForm');
+        const successEl = document.getElementById('nlSuccess');
+        const errorEl = document.getElementById('nlError');
+
+        if (!form) return;
+
+        function encodeFormData(fd) {
+        return new URLSearchParams([...fd]).toString();
+        }
+
+        form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById("newsletterEmail").value.trim();
+        const phone = document.getElementById("newsletterPhone").value.trim();
+        if (!email && !phone) {
+            alert("Please enter either your email or phone number to subscribe.");
+            return;
+        }
+
+        const fd = new FormData(form);
+        // Ensure form-name is included when using fetch
+        fd.append('form-name', 'newsletter');
+
+        try {
+            await fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: encodeFormData(fd),
+            });
+
+            if (successEl) successEl.classList.remove('hidden');
+            try { localStorage.setItem('qceNewsletterDismissed', 'true'); } catch {}
+            // Close modal after a beat
+            setTimeout(() => { if (typeof closeModal === 'function') closeModal(); }, 800);
+            form.reset();
+        } catch (err) {
+            if (errorEl) errorEl.classList.remove('hidden');
+        }
+        });
+    })();
+    </script>
+
 
 </body>
 </html>
