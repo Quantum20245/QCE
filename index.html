@@ -489,6 +489,9 @@
         <!-- Honeypot (spam protection) -->
         <p class="hidden"><label>Don’t fill this out: <input name="bot-field" /></label></p>
 
+        <input type="text" id="newsletterName" name="full-name" placeholder="Full name" required
+         class="w-full border border-gray-300 px-4 py-2 rounded" autocomplete="name" />
+
         <input type="email" id="newsletterEmail" name="email" placeholder="Your email address"
             class="w-full border border-gray-300 px-4 py-2 rounded" />
         <input type="tel" id="newsletterPhone" name="phone" placeholder="Your phone number"
@@ -543,6 +546,7 @@
         form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
+        const fullName = document.getElementById("newsletterName").value.trim();
         const email = document.getElementById("newsletterEmail").value.trim();
         const phone = document.getElementById("newsletterPhone").value.trim();
         if (!email && !phone) {
