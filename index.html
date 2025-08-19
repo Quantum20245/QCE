@@ -471,91 +471,85 @@
 <!-- Newsletter Modal -->
 <div id="newsletterModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
   <div class="newsletter-box bg-white rounded-xl shadow-2xl max-w-xl w-full relative px-8 py-10 text-center text-gray-800 overflow-hidden">
+    <!-- Close Button -->
     <button onclick="closeModal()" class="absolute top-2 right-2 text-white bg-blue-700 rounded-full w-6 h-6 flex items-center justify-center">&times;</button>
 
+    <!-- Centered Text and Form -->
     <div class="flex flex-col items-center justify-center text-center">
       <h2 class="text-3xl font-bold text-blue-800 mb-2">Subscribe for Assistance</h2>
       <p class="text-gray-700 mb-6">Leave your contact — We'll handle the rest!</p>
-<!-- the form goes here -->
-      <!-- ... -->
+
+      <!-- The ONLY visible form (inside the modal) -->
+      <form name="newsletter"
+            method="POST"
+            action="/"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+            id="newsletterForm"
+            class="w-full max-w-md flex flex-col gap-4 text-left">
+        <!-- Netlify detection -->
+        <input type="hidden" name="form-name" value="newsletter" />
+        <input type="hidden" name="source" value="home-index" />
+        <p class="hidden"><label>Don’t fill this out: <input name="bot-field" /></label></p>
+
+        <label class="text-sm font-medium text-gray-700">Full name</label>
+        <input type="text" name="full-name" placeholder="Full name" required
+               class="w-full border border-gray-300 px-4 py-2 rounded" autocomplete="name" />
+
+        <label class="text-sm font-medium text-gray-700">Email (optional)</label>
+        <input type="email" name="email" placeholder="Your email address"
+               class="w-full border border-gray-300 px-4 py-2 rounded" />
+
+        <label class="text-sm font-medium text-gray-700">Phone (optional)</label>
+        <input type="tel" name="phone" placeholder="Your phone number"
+               class="w-full border border-gray-300 px-4 py-2 rounded" />
+
+        <button type="submit"
+                class="mt-2 bg-blue-800 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition font-semibold w-full">
+          Join Now
+        </button>
+
+        <label class="inline-flex items-center mt-4">
+          <input type="checkbox" id="dontShowAgain" class="mr-2">
+          <span class="text-sm text-gray-600">Don't show this popup again</span>
+        </label>
+      </form>
     </div>
   </div>
 </div>
 
-        <form name="newsletter" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field"
-      id="newsletterForm" class="w-full flex flex-col gap-4">
-  <!-- Required hidden field so Netlify knows this form's name -->
-  <input type="hidden" name="form-name" value="newsletter" />
-  <!-- (Optional) capture source page -->
-  <input type="hidden" name="source" value="home-index" />
-  <!-- Honeypot (spam protection) -->
-  <p class="hidden"><label>Don’t fill this out: <input name="bot-field" /></label></p>
-
-  <input type="text" id="newsletterName" name="full-name" placeholder="Full name" required
-    class="w-full border border-gray-300 px-4 py-2 rounded" autocomplete="name" />
-
-  <input type="email" id="newsletterEmail" name="email" placeholder="Your email address"
-    class="w-full border border-gray-300 px-4 py-2 rounded" />
-  <input type="tel" id="newsletterPhone" name="phone" placeholder="Your phone number"
-    class="w-full border border-gray-300 px-4 py-2 rounded" />
-
-  <button type="submit"
-    class="bg-blue-800 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition font-semibold w-full">
-    Join Now
-  </button>
-</form>
+<!-- Popup logic: show after 800ms unless previously dismissed -->
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    if (!localStorage.getItem("qceNewsletterDismissed")) {
-      setTimeout(() => {
-        document.getElementById("newsletterModal").classList.remove("hidden");
-      }, 800); // show after 800ms
+    try {
+      const modal = document.getElementById("newsletterModal");
+      if (!modal) return;
+      if (!localStorage.getItem("qceNewsletterDismissed")) {
+        setTimeout(() => {
+          modal.classList.remove("hidden");
+        }, 800);
+      }
+    } catch (e) {
+      console.error("Popup init error:", e);
     }
   });
 
   function closeModal() {
-    if (document.getElementById("dontShowAgain")?.checked) {
-      localStorage.setItem("qceNewsletterDismissed", "true");
+    const dont = document.getElementById("dontShowAgain");
+    if (dont && dont.checked) {
+      try { localStorage.setItem("qceNewsletterDismissed", "true"); } catch {}
     }
-    document.getElementById("newsletterModal").classList.add("hidden");
+    const modal = document.getElementById("newsletterModal");
+    if (modal) modal.classList.add("hidden");
   }
 </script>
-<!-- Centered Text and Form -->
-<div class="flex flex-col items-center justify-center text-center">
-  <h2 class="text-3xl font-bold text-blue-800 mb-2">Subscribe for Assistance</h2>
-  <p class="text-gray-700 mb-6">Leave your contact — We'll handle the rest!</p>
 
-  <!-- PASTE THE FORM HERE --> <form name="newsletter"
-      method="POST"
-      action="/"
-      data-netlify="true"
-      netlify-honeypot="bot-field"
-      id="newsletterForm"
-      class="w-full max-w-md flex flex-col gap-4 text-left">
-  <!-- Netlify detection -->
-  <input type="hidden" name="form-name" value="newsletter" />
-  <input type="hidden" name="source" value="home-index" />
-  <p class="hidden"><label>Don’t fill this out: <input name="bot-field" /></label></p>
-
-  <label class="text-sm font-medium text-gray-700">Full name</label>
-  <input type="text" name="full-name" placeholder="Full name" required
-         class="w-full border border-gray-300 px-4 py-2 rounded" autocomplete="name" />
-
-  <label class="text-sm font-medium text-gray-700">Email (optional)</label>
-  <input type="email" name="email" placeholder="Your email address"
-         class="w-full border border-gray-300 px-4 py-2 rounded" />
-
-  <label class="text-sm font-medium text-gray-700">Phone (optional)</label>
-  <input type="tel" name="phone" placeholder="Your phone number"
-         class="w-full border border-gray-300 px-4 py-2 rounded" />
-
-  <button type="submit"
-          class="mt-2 bg-blue-800 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition font-semibold w-full">
-    Join Now
-  </button>
+<!-- Hidden dummy form so Netlify detects the popup 'newsletter' form -->
+<form name="newsletter" netlify netlify-honeypot="bot-field" hidden>
+  <input type="text" name="full-name" />
+  <input type="email" name="email" />
+  <input type="tel" name="phone" />
 </form>
-</div>
-
 
 </body>
 </html>
