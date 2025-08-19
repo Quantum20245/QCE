@@ -576,6 +576,12 @@
         });
     })();
     </script>
+<!-- Hidden dummy form so Netlify detects the popup 'newsletter' form -->
+<form name="newsletter" netlify netlify-honeypot="bot-field" hidden>
+  <input type="text" name="full-name" />
+  <input type="email" name="email" />
+  <input type="tel" name="phone" />
+</form>
 
 
 </body>
