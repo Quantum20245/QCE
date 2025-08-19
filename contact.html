@@ -174,23 +174,19 @@
       <!-- Right Column -->
       <div>
         <h2 class="text-3xl font-bold text-blue-800 mb-6">Contact us to Check Your Medicare Eligibility</h2>
-        <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field"
-              id="contactForm" class="space-y-4">
-          <!-- Required so Netlify knows the form name -->
-          <input type="hidden" name="form-name" value="contact" />
-          <!-- Honeypot field (spam protection) -->
-          <p class="hidden"><label>Don’t fill this out: <input name="bot-field" /></label></p>
-          <!-- Optional: set a subject on the submission -->
-          <input type="hidden" name="subject" value="New Contact Submission from qcessentials.com" />
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <input type="text" id="firstName" name="firstName" placeholder="First Name *" class="border border-gray-300 px-4 py-2 rounded w-full" required>
-            <input type="text" id="lastName" name="lastName" placeholder="Last Name *" class="border border-gray-300 px-4 py-2 rounded w-full" required>
-          </div>
-          <input type="email" id="email" name="email" placeholder="Email *" class="border border-gray-300 px-4 py-2 rounded w-full" required>
-          <input type="tel" id="phone" name="phone" placeholder="Phone Number" class="border border-gray-300 px-4 py-2 rounded w-full">
-          <textarea id="message" name="message" placeholder="Your Message" class="border border-gray-300 px-4 py-2 rounded w-full h-32"></textarea>
-          <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">Send</button>
-        </form>
+        <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+  <input type="hidden" name="form-name" value="contact" />
+  <p class="hidden"><label>Don’t fill this out: <input name="bot-field" /></label></p>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <input type="text" name="firstName" placeholder="First Name *" class="border border-gray-300 px-4 py-2 rounded w-full" required>
+    <input type="text" name="lastName" placeholder="Last Name *" class="border border-gray-300 px-4 py-2 rounded w-full" required>
+  </div>
+  <input type="email" name="email" placeholder="Email *" class="border border-gray-300 px-4 py-2 rounded w-full" required>
+  <input type="tel" name="phone" placeholder="Phone Number" class="border border-gray-300 px-4 py-2 rounded w-full">
+  <textarea name="message" placeholder="Your Message" class="border border-gray-300 px-4 py-2 rounded w-full h-32"></textarea>
+  <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">Send</button>
+</form>
       </div>
     </div>
   </div>
