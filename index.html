@@ -531,51 +531,7 @@
   }
 </script>
 
-    <script>
-    (function () {
-        const form = document.getElementById('newsletterForm');
-        const successEl = document.getElementById('nlSuccess');
-        const errorEl = document.getElementById('nlError');
-
-        if (!form) return;
-
-        function encodeFormData(fd) {
-        return new URLSearchParams([...fd]).toString();
-        }
-
-        form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const fullName = document.getElementById("newsletterName").value.trim();
-        const email = document.getElementById("newsletterEmail").value.trim();
-        const phone = document.getElementById("newsletterPhone").value.trim();
-        if (!email && !phone) {
-            alert("Please enter either your email or phone number to subscribe.");
-            return;
-        }
-
-        const fd = new FormData(form);
-        // Ensure form-name is included when using fetch
-        fd.append('form-name', 'newsletter');
-
-        try {
-            await fetch('/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: encodeFormData(fd),
-            });
-
-            if (successEl) successEl.classList.remove('hidden');
-            try { localStorage.setItem('qceNewsletterDismissed', 'true'); } catch {}
-            // Close modal after a beat
-            setTimeout(() => { if (typeof closeModal === 'function') closeModal(); }, 800);
-            form.reset();
-        } catch (err) {
-            if (errorEl) errorEl.classList.remove('hidden');
-        }
-        });
-    })();
-    </script>
+   
 <!-- Hidden dummy form so Netlify detects the popup 'newsletter' form -->
 <form name="newsletter" netlify netlify-honeypot="bot-field" hidden>
   <input type="text" name="full-name" />
